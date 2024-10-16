@@ -14,8 +14,6 @@ public class CustomerAccountManagementSteps {
 
     @Given("I am on the registration page")
     public void iAmOnTheRegistrationPage() {
-        // Code to navigate to the registration page
-        // For testing purposes, we can simulate this
         customer = new Customer();
     }
 
@@ -41,6 +39,13 @@ public class CustomerAccountManagementSteps {
     // Scenario 2: Linking payment methods and topping up the Prepaid Account
     @Given("I am logged into my Customer account")
     public void iAmLoggedIntoMyCustomerAccount() {
+        // Simulate login
+        customer = new Customer();
+        customer.setName("Max Mustermann");
+        customer.setEmail("max.m@google.com");
+        customer.setPassword("MaxMusterMann");
+        accountCreated = customer.registerAccount();
+        assertTrue(accountCreated, "Customer account should be created");
     }
 
     @When("I link my payment method")
@@ -50,7 +55,7 @@ public class CustomerAccountManagementSteps {
 
     @And("I perform a Balance Top-Up of ${int} to my Prepaid Account")
     public void iPerformABalanceTopUpOf$ToMyPrepaidAccount(int arg0) {
-        
+
     }
 
     @Then("my balance in the Prepaid Account increases by ${int}")
