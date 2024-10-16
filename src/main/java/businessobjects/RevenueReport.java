@@ -30,4 +30,11 @@ public class RevenueReport {
     public double getRevenue() {
         return revenue;
     }
+
+    public void DisplayReport()
+    {
+        System.out.println("ReportId: " + reportId);
+        System.out.println("Date: " + date);
+        System.out.println("Revenue: " + revenue);
+    }
 }

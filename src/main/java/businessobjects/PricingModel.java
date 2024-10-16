@@ -1,9 +1,6 @@
 package businessobjects;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class PricingModel {
 
@@ -11,7 +8,7 @@ public class PricingModel {
     private Date validFrom;
     private Date validTo;
     private Map<ChargingMode, Double> prices;
-    private List<Invoice> invoices;
+    private ArrayList<Invoice> invoices;
 
 
     // Constructor
@@ -20,6 +17,7 @@ public class PricingModel {
         this.validFrom = validFrom;
         this.validTo = validTo;
         this.prices = new HashMap<>();
+        this.invoices = new ArrayList<>();
     }
 
     // Set price for a charging mode
