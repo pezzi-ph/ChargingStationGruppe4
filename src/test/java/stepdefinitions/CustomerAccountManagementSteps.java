@@ -50,7 +50,7 @@ public class CustomerAccountManagementSteps {
 
     @When("I link my payment method")
     public void iLinkMyPaymentMethod() {
-        
+
     }
 
     @And("I perform a Balance Top-Up of ${int} to my Prepaid Account")
