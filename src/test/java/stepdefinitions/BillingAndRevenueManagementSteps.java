@@ -1,13 +1,19 @@
 package stepdefinitions;
 
+import businessobjects.Owner;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import businessobjects.*;
 
 public class BillingAndRevenueManagementSteps {
     @Given("I am logged in as the Owner")
     public void iAmLoggedInAsTheOwner() {
-        System.out.println("Logging in as Owner...");
+        owner = new Owner();
+        owner.setUsername("admin");
+        owner.setPassword("password123");
+        boolean loggedIn = owner.login();
+        assertTrue(loggedIn, "Owner should be logged in");
     }
 
     @When("I generate a Revenue Report for Location {string} for the last month")
