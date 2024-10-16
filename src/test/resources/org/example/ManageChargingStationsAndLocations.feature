@@ -16,6 +16,6 @@ Feature: Managing Charging Stations and Point
     Then Charging Point 1 at "123 Main Street" has the Charging Mode "DC"
 
   Scenario: Updating the Operational Status of Charging Points
-    Given Charging Point 1 at "123 Main Street" has the Operational Status "Available"
-    When I set the Operational Status of Charging Point 1 to "Out of Order"
-    Then Charging Point 1 at "123 Main Street" has the Operational Status "Out of Order"
+    Given Charging Point 1 at "123 Main Street" has the Operational Status "AVAILABLE"
+    When I set the Operational Status of Charging Point 1 to "OUT_OF_ORDER"
+    Then Charging Point 1 at "123 Main Street" has the new Operational Status "OUT_OF_ORDER"

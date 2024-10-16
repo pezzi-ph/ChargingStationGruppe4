@@ -4,6 +4,7 @@ import businessobjects.ChargingPoint;
 import businessobjects.ChargingStation;
 import businessobjects.Owner;
 import enums.ChargingType;
+import enums.Status;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -45,22 +46,45 @@ public class ManageChargingStationsAndLocationsSteps {
     }
 
     @Given("the Charging Station {string} has {int} Charging Points")
-    public void theChargingStationHasChargingPoints(String arg0, int arg1) {
+    public void theChargingStationHasChargingPoints(String location, int size) {
+        iLoggedInAsTheOwner();
+        chargingStation = new ChargingStation(location, owner);
+        for(int i = 0; i<size;i++){
+            chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+        }
     }
 
     @When("I assign the Charging Mode {string} to Charging Point {int}")
-    public void iAssignTheChargingModeToChargingPoint(String arg0, int arg1) {
+    public void iAssignTheChargingModeToChargingPoint(String chargingType, int index) {
+        chargingStation.chargingPoints.get(index).setChargingType(ChargingType.valueOf(chargingType));
     }
 
     @Then("Charging Point {int} at {string} has the Charging Mode {string}")
-    public void chargingPointAtHasTheChargingMode(int arg0, String arg1, String arg2) {
+    public void chargingPointAtHasTheChargingMode(int index, String location, String chargingType) {
+        assertEquals(chargingStation.getLocation(), location);
+        assertEquals(chargingStation.chargingPoints.get(index).getChargingType(), ChargingType.valueOf(chargingType));
     }
 
     @Given("Charging Point {int} at {string} has the Operational Status {string}")
-    public void chargingPointAtHasTheOperationalStatus(int arg0, String arg1, String arg2) {
+    public void chargingPointAtHasTheOperationalStatus(int index, String location, String status) {
+        iLoggedInAsTheOwner();
+        chargingStation = new ChargingStation(location, owner);
+        for(int i = 0; i<index+1;i++){
+            chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+        }
+        chargingStation.chargingPoints.get(index).setStatus(Status.valueOf(status));
     }
 
     @When("I set the Operational Status of Charging Point {int} to {string}")
-    public void iSetTheOperationalStatusOfChargingPointTo(int arg0, String arg1) {
+    public void iSetTheOperationalStatusOfChargingPointTo(int index, String status) {
+        chargingStation.chargingPoints.get(index).setStatus(Status.valueOf(status));
+
+    }
+
+    @Then("Charging Point {int} at {string} has the new Operational Status {string}")
+    public void chargingPointAtHasTheNewOperationalStatus(int index, String location, String status) {
+        assertEquals(chargingStation.getLocation(), location);
+        assertEquals(chargingStation.chargingPoints.get(index).getStatus(), Status.valueOf(status));
+
     }
 }
