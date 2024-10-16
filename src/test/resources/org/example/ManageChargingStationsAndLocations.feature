@@ -5,7 +5,7 @@ Feature: Managing Charging Stations and Point
   So that I can efficiently operate the Electric Filling Station Network.
 
   Scenario: Creating a new Charging Station with Charging Points
-    Given I am logged in as the Owner
+    Given I logged in as the Owner
     When I create a new Charging Station with location "123 Main Street"
     And I add 5 Charging Points of type "AC"
     Then the Charging Station "123 Main Street" is added with 5 Charging Points of type "AC"

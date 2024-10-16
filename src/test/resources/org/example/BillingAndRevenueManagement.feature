@@ -5,7 +5,7 @@ Feature: Viewing Revenue Reports and Invoices
   So that I can analyze the financial performance of the Electric Filling Station Network.
 
   Scenario: Viewing total billing by Location, Charging Station, and time period
-    Given I am logged in as the Owner
+    Given I am logged in as the Station Owner
     When I generate a Revenue Report for Location "123 Main Street" for the last month
     Then I see the total billing for each Charging Station at that Location
 

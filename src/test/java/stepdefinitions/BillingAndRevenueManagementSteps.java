@@ -6,9 +6,13 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import businessobjects.*;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class BillingAndRevenueManagementSteps {
-    @Given("I am logged in as the Owner")
-    public void iAmLoggedInAsTheOwner() {
+    private Owner owner;
+
+    @Given("I am logged in as the Station Owner")
+    public void iAmLoggedInAsTheStationOwner() {
         owner = new Owner();
         owner.setUsername("admin");
         owner.setPassword("password123");

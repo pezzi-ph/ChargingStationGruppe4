@@ -1,20 +1,23 @@
 package stepdefinitions;
 
+import businessobjects.ChargingPoint;
 import businessobjects.ChargingStation;
 import businessobjects.Owner;
+import enums.ChargingType;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ManageChargingStationsAndLocationsSteps {
     private Owner owner;
     private ChargingStation chargingStation;
 
-    @Given("I am logged in as the Owner")
-    public void iAmLoggedInAsTheOwner() {
+    @Given("I logged in as the Owner")
+    public void iLoggedInAsTheOwner() {
         owner = new Owner();
         owner.setUsername("admin");
         owner.setPassword("password123");
@@ -28,12 +31,17 @@ public class ManageChargingStationsAndLocationsSteps {
     }
 
     @And("I add {int} Charging Points of type {string}")
-    public void iAddChargingPointsOfType(int arg0, String arg1) {
-
+    public void iAddChargingPointsOfType(int size, String chargingType) {
+        for(int i = 0; i<size;i++){
+            chargingStation.addChargingPoint(new ChargingPoint(ChargingType.valueOf(chargingType)));
+        }
     }
 
     @Then("the Charging Station {string} is added with {int} Charging Points of type {string}")
-    public void theChargingStationIsAddedWithChargingPointsOfType(String arg0, int arg1, String arg2) {
+    public void theChargingStationIsAddedWithChargingPointsOfType(String location, int size, String chargingType) {
+        assertEquals(chargingStation.getLocation(), location);
+        assertEquals(chargingStation.chargingPoints.size(), size);
+        assertTrue(chargingStation.chargingPoints.stream().allMatch(x-> x.getChargingType().equals(ChargingType.valueOf(chargingType))));
     }
 
     @Given("the Charging Station {string} has {int} Charging Points")
