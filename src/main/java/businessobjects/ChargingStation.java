@@ -9,8 +9,6 @@ public class ChargingStation {
 
     private String stationId;
     private String location;
-    private ChargingStation chargingStation;
-    private OperationalStatus operationalStatus;
     public ArrayList<ChargingPoint> chargingPoints;
 
     // Constructor
@@ -32,11 +30,5 @@ public class ChargingStation {
         this.chargingPoints.add(chargingPoint);
     }
 
-    public void setOperationalStatus(OperationalStatus operationalStatus) {
-        this.operationalStatus = operationalStatus;
-    }
 
-    public OperationalStatus getOperationalStatus() {
-        return operationalStatus;
-    }
 }

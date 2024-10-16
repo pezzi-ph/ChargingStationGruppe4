@@ -1,6 +1,8 @@
 package stepdefinitions;
 
 import businessobjects.*;
+import enums.ChargingType;
+import enums.Status;
 import io.cucumber.java.en.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
@@ -9,12 +11,10 @@ import java.util.List;
 public class MonitorChargingStationStatusSteps {
     private Owner owner;
     private ChargingStation chargingStation;
-    private List<ChargingStation> chargingStations;
-    private List<String> operationalStatuses;
-    private List<String> chargingModes;
+    private List<Status> statuses;
 
-    @Given("I am logged in as the Owner.")
-    public void iAmLoggedInAsTheOwner() {
+    @Given("I logged in as the Station Owner.")
+    public void iLoggedInAsTheStationOwner() {
         owner = new Owner();
         owner.setUsername("admin");
         owner.setPassword("password123");
@@ -22,34 +22,37 @@ public class MonitorChargingStationStatusSteps {
         assertTrue(loggedIn, "Owner should be logged in");
     }
 
-    @When("I view the Operational Status of all Charging Stations")
-    public void iViewTheOperationalStatusOfAllChargingStations() {
-        // Initialize a list of ChargingStations
-        chargingStations = new ArrayList<>();
+    @When("I view the Status of all Charging Points")
+    public void iViewTheStatusOfAllChargingPoints() {
+        // Initialize a list of ChargingPoints
+        chargingStation = new ChargingStation("123 Main Street",owner);
 
-        // For testing purposes, we'll create some charging stations
-        ChargingStation station1 = new ChargingStation("CS001", owner);
-        station1.setOperationalStatus(OperationalStatus.AVAILABLE);
+        // For testing purposes, we'll create some charging points
+        ChargingPoint point1 = new ChargingPoint(ChargingType.AC);
+        point1.setStatus(Status.AVAILABLE);
 
-        ChargingStation station2 = new ChargingStation("CS002", owner);
-        station2.setOperationalStatus(OperationalStatus.IN_USE);
+        ChargingPoint point2 = new ChargingPoint(ChargingType.DC);
+        point2.setStatus(Status.IN_USE);
 
-        ChargingStation station3 = new ChargingStation("CS003", owner);
-        station3.setOperationalStatus(OperationalStatus.OUT_OF_ORDER);
+        ChargingPoint point3 = new ChargingPoint(ChargingType.AC);
+        point3.setStatus(Status.OUT_OF_ORDER);
 
-        // Add stations to the list
-        chargingStations.add(station1);
-        chargingStations.add(station2);
-        chargingStations.add(station3);
+        // Add points to the list
+        chargingStation.addChargingPoint(point1);
+        chargingStation.addChargingPoint(point2);
+        chargingStation.addChargingPoint(point3);
 
         // Collect the operational statuses
-        operationalStatuses = new ArrayList<>();
-        for (ChargingStation station : chargingStations) {
-            operationalStatuses.add(station.getOperationalStatus().toString());
+        statuses = new ArrayList<>();
+        for (ChargingPoint point : chargingStation.chargingPoints) {
+            statuses.add(point.getStatus());
         }
     }
 
-    @Then("I see the Operational Status \\({string}, {string}, {string}) of each Charging Station at every Location")
-    public void iSeeTheOperationalStatusOfEachChargingStationAtEveryLocation(String arg0, String arg1, String arg2) {
+    @Then("I see the Status \\({string}, {string}, {string}) of each Charging Point at every Location")
+    public void iSeeTheStatusOfEachChargingPointAtEveryLocation(String arg0, String arg1, String arg2) {
+        assertEquals(chargingStation.chargingPoints.get(0).getStatus(), Status.valueOf(arg0));
+        assertEquals(chargingStation.chargingPoints.get(1).getStatus(), Status.valueOf(arg1));
+        assertEquals(chargingStation.chargingPoints.get(2).getStatus(), Status.valueOf(arg2));
     }
 }

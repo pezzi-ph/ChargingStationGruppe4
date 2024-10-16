@@ -1,5 +1,8 @@
 package businessobjects;
 
+import enums.ChargingType;
+import enums.Status;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -8,7 +11,7 @@ public class ChargingSession {
     private String sessionId;
     private String customerId;
     private String chargingStationId;
-    private ChargingMode chargingMode;
+    private ChargingType chargingType;
     private String location;
     private double usedEnergy; // in kWh
     private double cost; // in currency units
@@ -24,14 +27,16 @@ public class ChargingSession {
         this.startTime = LocalDateTime.now();
     }
 
-    public boolean startSession(Customer customer, ChargingStation station) {
-        if (station.getOperationalStatus() == OperationalStatus.AVAILABLE) {
-            station.setOperationalStatus(OperationalStatus.IN_USE);
+    public boolean startSession(Customer customer, ChargingStation chargingStation, int index) {
+        ChargingPoint chargingPoint = chargingStation.chargingPoints.get(index);
+        if (chargingPoint.getStatus() == Status.AVAILABLE) {
+            chargingPoint.setStatus(Status.IN_USE);
             this.customerId = customer.getCustomerId();
-            this.chargingStationId = station.getStationId();
-            this.chargingMode = station.getChargingMode();
-            this.location = station.getLocation();
+            this.chargingStationId = chargingPoint.getPointId();
+            this.chargingType = chargingPoint.getChargingType();
             this.startTime = LocalDateTime.now();
+            this.location = chargingStation.getLocation();
+
             this.inProgress = true;
 
             // Send notification to customer
@@ -70,8 +75,8 @@ public class ChargingSession {
         return chargingStationId;
     }
 
-    public ChargingMode getChargingMode() {
-        return chargingMode;
+    public ChargingType getChargingType() {
+        return chargingType;
     }
 
     public String getLocation() {
@@ -102,8 +107,8 @@ public class ChargingSession {
         this.chargingStationId = chargingStationId;
     }
 
-    public void setChargingMode(ChargingMode chargingMode) {
-        this.chargingMode = chargingMode;
+    public void setChargingType(ChargingType chargingType) {
+        this.chargingType = chargingType;
     }
 
     public void setLocation(String location) {
