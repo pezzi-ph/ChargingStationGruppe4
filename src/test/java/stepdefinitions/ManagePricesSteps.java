@@ -25,7 +25,7 @@ public class ManagePricesSteps {
     @When("I set the price at Charging Station {string} during {string} for Charging Mode {string} to ${double} per kWh")
     public void iSetThePriceAtChargingStationDuringForChargingModeTo$PerKWh(String locationName, String timePeriod, String chargingMode, double price) {
         // Initialize the Charging Station and PricingModel
-        chargingStation = new ChargingStation(locationName);
+        chargingStation = new ChargingStation(locationName,owner);
         pricingModel = new PricingModel(chargingStation, timePeriod);
 
         // Set the price for the specified charging mode
@@ -50,7 +50,7 @@ public class ManagePricesSteps {
     @Given("I have a PricingModel for Charging Station {string}")
     public void iHaveAPricingModelForChargingStation(String locationName) {
         // Initialize the Charging Station and PricingModel
-        chargingStation = new ChargingStation(locationName);
+        chargingStation = new ChargingStation(locationName,owner);
         pricingModel = new PricingModel(chargingStation, "Default Time");
     }
 

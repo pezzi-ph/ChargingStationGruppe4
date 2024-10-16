@@ -11,7 +11,10 @@ public class ChargingStation {
     public ArrayList<ChargingPoint> chargingPoints;
 
     // Constructor
-    public ChargingStation(String location) {
+    public ChargingStation(String location, Owner owner) {
+        if(!owner.isLoggedIn()){
+            return;
+        }
         this.stationId = UUID.randomUUID().toString();
         this.location = location;
         this.chargingPoints = new ArrayList<>();

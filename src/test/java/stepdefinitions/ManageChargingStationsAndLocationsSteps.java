@@ -27,7 +27,7 @@ public class ManageChargingStationsAndLocationsSteps {
 
     @When("I create a new Charging Station with location {string}")
     public void iCreateANewChargingStationWithLocation(String location) {
-        chargingStation = new ChargingStation(location);
+        chargingStation = new ChargingStation(location, owner);
     }
 
     @And("I add {int} Charging Points of type {string}")
