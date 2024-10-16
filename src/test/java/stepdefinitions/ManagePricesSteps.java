@@ -6,9 +6,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import businessobjects.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ManagePricesSteps {
     private Owner owner;
-    private ChargingStation location;
+    private ChargingStation chargingStation;
     private PricingModel pricingModel;
 
     @Given("I am logged in as the Owner")
@@ -20,11 +22,11 @@ public class ManagePricesSteps {
         assertTrue(loggedIn, "Owner should be logged in");
     }
 
-    @When("I set the price at Location {string} during {string} for Charging Mode {string} to ${double} per kWh")
-    public void iSetThePriceAtLocationDuringForChargingModeToPerKWh(String locationName, String timePeriod, String chargingMode, double price) {
-        // Initialize the Location and PricingModel
-        location = new ChargingStation(locationName);
-        pricingModel = new PricingModel(location, timePeriod);
+    @When("I set the price at Charging Station {string} during {string} for Charging Mode {string} to ${double} per kWh")
+    public void iSetThePriceAtChargingStationDuringForChargingModeTo$PerKWh(String locationName, String timePeriod, String chargingMode, double price) {
+        // Initialize the Charging Station and PricingModel
+        chargingStation = new ChargingStation(locationName);
+        pricingModel = new PricingModel(chargingStation, timePeriod);
 
         // Set the price for the specified charging mode
         pricingModel.setPrice(ChargingMode.valueOf(chargingMode), price);
@@ -37,19 +39,19 @@ public class ManagePricesSteps {
         pricingModel.setPrice(ChargingMode.valueOf(chargingMode), price);
     }
 
-    @Then("the PricingModel for Location {string} during {string} is updated")
-    public void thePricingModelForLocationDuringIsUpdated(String locationName, String timePeriod) {
+    @Then("the PricingModel for Chargin Station {string} during {string} is updated")
+    public void thePricingModelForCharginStationDuringIsUpdated(String locationName, String timePeriod) {
         // Verify that the pricing model has been updated
         assertEquals(locationName, pricingModel.getLocation().getName());
         assertEquals(timePeriod, pricingModel.getTimePeriod());
         assertNotNull(pricingModel.getPrices());
     }
 
-    @Given("I have a PricingModel for Location {string}")
-    public void iHaveAPricingModelForLocation(String locationName) {
-        // Initialize the Location and PricingModel
-        location = new ChargingStation(locationName);
-        pricingModel = new PricingModel(location, "Default Time");
+    @Given("I have a PricingModel for Charging Station {string}")
+    public void iHaveAPricingModelForChargingStation(String locationName) {
+        // Initialize the Charging Station and PricingModel
+        chargingStation = new ChargingStation(locationName);
+        pricingModel = new PricingModel(chargingStation, "Default Time");
     }
 
     @When("I assign the price to Charging Mode {string}")
