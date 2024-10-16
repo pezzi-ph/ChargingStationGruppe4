@@ -7,6 +7,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import businessobjects.*;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagePricesSteps {
@@ -27,7 +30,10 @@ public class ManagePricesSteps {
     public void iSetThePriceAtChargingStationDuringForChargingModeTo$PerKWh(String locationName, String timePeriod, String chargingMode, double price) {
         // Initialize the Charging Station and PricingModel
         chargingStation = new ChargingStation(locationName,owner);
-        pricingModel = new PricingModel(chargingStation, timePeriod);
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -30); // Subtract 30 days
+        Date pastDate = calendar.getTime();
+        pricingModel = new PricingModel(chargingStation, pastDate, new Date());
 
         // Set the price for the specified charging type
         pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);

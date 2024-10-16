@@ -1,6 +1,10 @@
 package businessobjects;
 
+import java.util.UUID;
+
 public class Invoice {
+    String invoiceId;
+    double amount;
 
     private String invoiceId;
     private ChargingSession chargingSession;
@@ -13,17 +17,19 @@ public class Invoice {
         // Additional invoice generation logic can be added here
     }
 
-    // Getters
-
     public String getInvoiceId() {
         return invoiceId;
+    }
+
+    public double getAmount() {
+        return amount;
     }
 
     public ChargingSession getChargingSession() {
         return chargingSession;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

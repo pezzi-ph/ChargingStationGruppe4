@@ -8,8 +8,17 @@ import businessobjects.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Date;
+import java.util.Calendar;
+
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class BillingAndRevenueManagementSteps {
-    private Owner owner;
+    Owner owner;
+    ChargingStation station;
+    RevenueReport report;
 
     @Given("I am logged in as the Station Owner")
     public void iAmLoggedInAsTheStationOwner() {
@@ -21,12 +30,31 @@ public class BillingAndRevenueManagementSteps {
     }
 
     @When("I generate a Revenue Report for Location {string} for the last month")
-    public void iGenerateARevenueReportForLocationForTheLastMonth(String arg0) {
+    public void iGenerateARevenueReportForLocationForTheLastMonth(String location) {
+        station = new ChargingStation(location, owner);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -30); // Subtract 30 days
+        Date pastDate = calendar.getTime();
+
+        PricingModel model1 = new PricingModel(station, pastDate, new Date());
+        model1.setPrice(ChargingMode.AC, 100);
+        Invoice inv1 = new Invoice(model1.getPrice(ChargingMode.AC));
+        model1.pushInvoice(inv1);
+
+        PricingModel model2 = new PricingModel(station, pastDate, new Date());
+        model2.setPrice(ChargingMode.DC, 99);
+        Invoice inv2 = new Invoice(model2.getPrice(ChargingMode.AC));
+        model2.pushInvoice(inv2);
+
+        PricingModel[] models = {model1, model2};
+        station.setPricingModels(models);
     }
 
     @Then("I see the total billing for each Charging Station at that Location")
     public void iSeeTheTotalBillingForEachChargingStationAtThatLocation() {
-        
+        report = station.GenerateRevenueReport();
+        assertEquals(199, report.getRevenue(), "I generated a revenue report");
     }
 
     @Given("I need to review revenue")
