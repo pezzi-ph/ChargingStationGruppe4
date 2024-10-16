@@ -1,18 +1,24 @@
 package businessobjects;
 
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PricingModel {
 
     private ChargingStation chargingStation;
-    private String timePeriod;
+    private Date validFrom;
+    private Date validTo;
     private Map<ChargingMode, Double> prices;
+    private List<Invoice> invoices;
+
 
     // Constructor
-    public PricingModel(ChargingStation chargingStation, String timePeriod) {
+    public PricingModel(ChargingStation chargingStation, Date validFrom, Date validTo) {
         this.chargingStation = chargingStation;
-        this.timePeriod = timePeriod;
+        this.validFrom = validFrom;
+        this.validTo = validTo;
         this.prices = new HashMap<>();
     }
 
@@ -31,11 +37,24 @@ public class PricingModel {
         return chargingStation;
     }
 
-    public String getTimePeriod() {
-        return timePeriod;
-    }
-
     public Map<ChargingMode, Double> getPrices() {
         return prices;
     }
+
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void pushInvoice(Invoice invoice) {
+        invoices.add(invoice);
+    }
+
+    public Date getValidFrom() {
+        return validFrom;
+    }
+
+    public Date getValidTo() {
+        return validTo;
+    }
+
 }
