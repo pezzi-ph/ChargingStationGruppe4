@@ -1,16 +1,21 @@
 package businessobjects;
 
+import java.util.UUID;
+
 public class ChargingStation {
 
-    private String name;
+    private String stationId;
+    private String location;
+    private ChargingPoint[] chargingPoints;
 
     // Constructor
-    public ChargingStation(String name) {
-        this.name = name;
+    public ChargingStation(String location) {
+        location = UUID.randomUUID().toString();
+        this.location = location;
     }
 
     // Getter
-    public String getName() {
-        return name;
+    public String getLocation() {
+        return location;
     }
 }

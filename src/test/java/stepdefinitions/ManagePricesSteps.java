@@ -40,7 +40,7 @@ public class ManagePricesSteps {
     @Then("the PricingModel for Location {string} during {string} is updated")
     public void thePricingModelForLocationDuringIsUpdated(String locationName, String timePeriod) {
         // Verify that the pricing model has been updated
-        assertEquals(locationName, pricingModel.getLocation().getName());
+        assertEquals(locationName, pricingModel.getLocation().getLocation());
         assertEquals(timePeriod, pricingModel.getTimePeriod());
         assertNotNull(pricingModel.getPrices());
     }
