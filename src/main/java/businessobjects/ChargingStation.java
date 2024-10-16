@@ -3,11 +3,14 @@ package businessobjects;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import businessobjects.*;
 
 public class ChargingStation {
 
     private String stationId;
     private String location;
+    private ChargingStation chargingStation;
+    private OperationalStatus operationalStatus;
     public ArrayList<ChargingPoint> chargingPoints;
 
     // Constructor
@@ -27,5 +30,13 @@ public class ChargingStation {
 
     public void addChargingPoint(ChargingPoint chargingPoint){
         this.chargingPoints.add(chargingPoint);
+    }
+
+    public void setOperationalStatus(OperationalStatus operationalStatus) {
+        this.operationalStatus = operationalStatus;
+    }
+
+    public OperationalStatus getOperationalStatus() {
+        return operationalStatus;
     }
 }
