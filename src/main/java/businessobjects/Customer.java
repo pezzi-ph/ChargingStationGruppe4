@@ -52,10 +52,16 @@ public class Customer {
     }
 
     public void addChargingSession(ChargingSession session) {
+        if (chargingSessions == null) {
+            chargingSessions = new ArrayList<>();
+        }
         this.chargingSessions.add(session);
     }
 
     public List<ChargingSession> getChargingSessions() {
+        if (chargingSessions == null) {
+            chargingSessions = new ArrayList<>();
+        }
         return chargingSessions;
     }
 

@@ -1,5 +1,7 @@
 package businessobjects;
 
+import enums.ChargingType;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,7 +9,7 @@ public class PricingModel {
 
     private ChargingStation chargingStation;
     private String timePeriod;
-    private Map<ChargingMode, Double> prices;
+    private Map<ChargingType, Double> prices;
 
     // Constructor
     public PricingModel(ChargingStation chargingStation, String timePeriod) {
@@ -17,13 +19,13 @@ public class PricingModel {
     }
 
     // Set price for a charging mode
-    public void setPrice(ChargingMode mode, double price) {
-        prices.put(mode, price);
+    public void setPrice(ChargingType chargingType, double price) {
+        prices.put(chargingType, price);
     }
 
     // Get price for a charging mode
-    public double getPrice(ChargingMode mode) {
-        return prices.getOrDefault(mode, 0.0);
+    public double getPrice(ChargingType chargingType) {
+        return prices.getOrDefault(chargingType, 0.0);
     }
 
     // Getters
@@ -35,7 +37,7 @@ public class PricingModel {
         return timePeriod;
     }
 
-    public Map<ChargingMode, Double> getPrices() {
+    public Map<ChargingType, Double> getPrices() {
         return prices;
     }
 }
