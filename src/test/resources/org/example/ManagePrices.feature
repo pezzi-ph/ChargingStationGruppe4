@@ -6,9 +6,9 @@ Feature: Creating and Updating Prices for Charging Modes
 
   Scenario: Creating prices for charging based on Chargin Station and time of day
     Given I am logged in as the Owner
-    When I set the price at Charging Station "Gasse 11" during "Peak Hours" for Charging Mode "AC" to $0.30 per kWh
+    When I set the price at Charging Station "Gasse 11" from "1.1.2024" to "31.10.2024" for Charging Mode "AC" to $0.30 per kWh
     And I set the price for Charging Mode "DC" to $0.50 per kWh
-    Then the PricingModel for Chargin Station "Gasse 11" during "Peak Hours" is updated
+    Then the PricingModel for Chargin Station "Gasse 11" from "1.1.2024" to "31.10.2024" is updated
 
   Scenario: Assigning prices to Charging Modes
     Given I have a PricingModel for Charging Station "Gasse 11"
