@@ -8,6 +8,7 @@ import businessobjects.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
 
@@ -44,7 +45,7 @@ public class BillingAndRevenueManagementSteps {
 
         PricingModel model2 = new PricingModel(station, pastDate, new Date());
         model2.setPrice(ChargingMode.DC, 99);
-        Invoice inv2 = new Invoice(model2.getPrice(ChargingMode.AC));
+        Invoice inv2 = new Invoice(model2.getPrice(ChargingMode.DC));
         model2.pushInvoice(inv2);
 
         PricingModel[] models = {model1, model2};
@@ -57,17 +58,35 @@ public class BillingAndRevenueManagementSteps {
         assertEquals(199, report.getRevenue(), "I generated a revenue report");
     }
 
+    ArrayList<RevenueReport> reports;
     @Given("I need to review revenue")
     public void iNeedToReviewRevenue() {
-        
+        iAmLoggedInAsTheStationOwner();
+        reports = new ArrayList<RevenueReport>();
     }
+
 
     @When("I generate a Revenue Report")
     public void iGenerateARevenueReport() {
-        
+        station = new ChargingStation("123 Main Street", owner);
+        PricingModel model1 = new PricingModel(station, new Date(), new Date());
+        model1.setPrice(ChargingMode.AC, 100);
+        Invoice inv1 = new Invoice(model1.getPrice(ChargingMode.AC));
+        model1.pushInvoice(inv1);
+
+        PricingModel[] models = {model1};
+        station.setPricingModels(models);
+
+        report = station.GenerateRevenueReport();
+        reports.add(report);
     }
 
     @Then("I receive a report summarizing total revenue by Location, Charging Mode, and time period")
     public void iReceiveAReportSummarizingTotalRevenueByLocationChargingModeAndTimePeriod() {
+        for(RevenueReport r : reports)
+        {
+            r.DisplayReport();
+        }
+        assertTrue(true);
     }
 }

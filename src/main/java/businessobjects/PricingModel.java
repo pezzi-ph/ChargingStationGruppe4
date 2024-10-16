@@ -1,11 +1,7 @@
 package businessobjects;
 
+import java.util.*;
 import enums.ChargingType;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class PricingModel {
 
@@ -13,7 +9,7 @@ public class PricingModel {
     private Date validFrom;
     private Date validTo;
     private Map<ChargingMode, Double> prices;
-    private List<Invoice> invoices;
+    private ArrayList<Invoice> invoices;
 
 
     // Constructor
@@ -22,6 +18,7 @@ public class PricingModel {
         this.validFrom = validFrom;
         this.validTo = validTo;
         this.prices = new HashMap<>();
+        this.invoices = new ArrayList<>();
     }
 
     // Set price for a charging mode
@@ -37,10 +34,6 @@ public class PricingModel {
     // Getters
     public ChargingStation getLocation() {
         return chargingStation;
-    }
-
-    public String getTimePeriod() {
-        return timePeriod;
     }
 
     public Map<ChargingType, Double> getPrices() {
