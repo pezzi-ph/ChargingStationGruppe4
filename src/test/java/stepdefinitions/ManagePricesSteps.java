@@ -40,12 +40,12 @@ public class ManagePricesSteps {
         pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);
     }
 
-    @Then("the PricingModel for Chargin Station {string} during {string} is updated")
-    public void thePricingModelForCharginStationDuringIsUpdated(String locationName, String timePeriod) {
-        // Verify that the pricing typel has been updated
+    @Then("the PricingModel for Charging Station {string} during {string} is ${double} for {string}")
+    public void thePricingModelForChargingStationDuringIsFor(String locationName, String timePeriod, double price, String type) {
+        // Verify that the pricing type has been updated
         assertEquals(locationName, pricingModel.getLocation().getLocation());
         assertEquals(timePeriod, pricingModel.getTimePeriod());
-        assertNotNull(pricingModel.getPrices());
+        assertEquals(pricingModel.getPrices().get(ChargingType.valueOf(type)),price);
     }
 
     @Given("I have a PricingModel for Charging Station {string}")
