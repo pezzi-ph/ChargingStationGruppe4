@@ -10,7 +10,7 @@ public class ChargingStation {
     private String stationId;
     private String location;
     private PricingModel[] pricingModels;
-    public ArrayList<ChargingPoint> chargingPoints= new ArrayList<>();
+    public ArrayList<ChargingPoint> chargingPoints = new ArrayList<>();
 
     // Constructor
     public ChargingStation(String location, Owner owner) {
