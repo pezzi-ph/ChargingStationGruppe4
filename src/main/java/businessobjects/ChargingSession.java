@@ -27,25 +27,41 @@ public class ChargingSession {
         this.startTime = LocalDateTime.now();
     }
 
-    public boolean startSession(Customer customer, ChargingStation chargingStation, int index) {
-        ChargingPoint chargingPoint = chargingStation.chargingPoints.get(index);
-        if (chargingPoint.getStatus() == Status.AVAILABLE) {
-            chargingPoint.setStatus(Status.IN_USE);
-            this.customerId = customer.getCustomerId();
-            this.chargingStationId = chargingPoint.getPointId();
-            this.chargingType = chargingPoint.getChargingType();
-            this.startTime = LocalDateTime.now();
-            this.location = chargingStation.getLocation();
+    public boolean startSession(Customer customer, ChargingStation chargingStation, int chargingPointIndex) {
+        ChargingPoint chargingPoint = chargingStation.chargingPoints.get(chargingPointIndex);
 
-            this.inProgress = true;
-
-            // Send notification to customer
-            customer.receiveNotification(new Notification("Charging Session started."));
-            return true;
-        } else {
-            return false;
+        // Check if the charging point is OUT_OF_ORDER
+        if (chargingPoint.getStatus() == Status.OUT_OF_ORDER) {
+            customer.receiveNotification(new Notification("Charging Point is out of order."));
+            return false; // The session should not start
         }
+
+        // Check if the charging point is IN_USE
+        if (chargingPoint.getStatus() == Status.IN_USE) {
+            customer.receiveNotification(new Notification("Charging Point is already in use."));
+            return false; // The session should not start
+        }
+
+        // Check if the customer has sufficient balance (assuming $20 is the minimum balance required)
+        if (!customer.getPrepaidAccount().hasSufficientBalance(20.0)) {
+            customer.receiveNotification(new Notification("Insufficient funds to start the charging session."));
+            return false; // The session should not start due to insufficient funds
+        }
+
+        // If the charging point is available and the customer has sufficient balance, start the session
+        chargingPoint.setStatus(Status.IN_USE); // Set the status to IN_USE
+        this.customerId = customer.getCustomerId();
+        this.chargingStationId = chargingPoint.getPointId();
+        this.chargingType = chargingPoint.getChargingType();
+        this.startTime = LocalDateTime.now();
+        this.location = chargingStation.getLocation();
+        this.inProgress = true;
+
+        // Send a notification to the customer that the session has started
+        customer.receiveNotification(new Notification("Charging Session started."));
+        return true;
     }
+
     public void endSession() {
         this.endTime = LocalDateTime.now();
         this.duration = (int) java.time.Duration.between(startTime, endTime).toMinutes();

@@ -116,10 +116,159 @@ public class ChargingSessionSteps {
     }
 
 
+    @Given("I have insufficient balance in my Prepaid Account")
+    public void iHaveInsufficientBalanceInMyPrepaidAccount() {
+        // Initialize customer and prepaid account
+        customer = new Customer("John Doe", "john.doe@example.com", "password123");
+        boolean accountCreated = customer.registerAccount();
+        assertTrue(accountCreated, "Customer account should be created");
+
+        // Top up the prepaid account
+        prepaidAccount = customer.getPrepaidAccount();
+        prepaidAccount.topUpBalance(50.0); // Top up with $50
+
+        // Assert that balance is sufficient
+        assertTrue(prepaidAccount.getBalance() >= 20.0, "Prepaid account balance should be sufficient");
+    }
 
 
+    @Given("I have insufficient balance")
+    public void iHaveInsufficientBalance() {
+        try {
+            // Simulate insufficient balance in the prepaid account
+            customer = new Customer("Jane Doe", "jane.doe@example.com", "password456");
+            boolean accountCreated = customer.registerAccount();
+            assertTrue(accountCreated, "Customer account should be created");
+
+            prepaidAccount = customer.getPrepaidAccount();
+            prepaidAccount.topUpBalance(5.0); // Only $5
+
+            // Assert that balance is insufficient
+            assertTrue(prepaidAccount.getBalance() < 20.0, "Prepaid account balance should be insufficient");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Insufficient balance check completed.");
+        }
+    }
+
+    @And("I attempt to start a Charging Session")
+    public void iAttemptToStartAChargingSession() {
+        try {
+            // Attempt to start the session
+            chargingSession = new ChargingSession();
+
+            // Initialize a ChargingStation with sufficient operational status
+            chargingStation = new ChargingStation("123 Main Street", owner);
+            chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+            chargingStation.chargingPoints.get(0).setStatus(Status.AVAILABLE);
+
+            // Set customer with insufficient balance
+            customer = new Customer("John Doe", "john.doe@example.com", "password123");
+            boolean accountCreated = customer.registerAccount();
+            assertTrue(accountCreated, "Customer account should be created");
+
+            prepaidAccount = customer.getPrepaidAccount();
+            prepaidAccount.topUpBalance(5.0); // Top up with only $5
+
+            // Try to start the session
+            boolean sessionStarted = chargingSession.startSession(customer, chargingStation, 0);
+            assertFalse(sessionStarted, "Charging session should not start due to insufficient balance");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Attempt to start session with insufficient balance completed.");
+        }
+    }
 
 
+    @Then("an error is shown indicating insufficient funds")
+    public void anErrorIsShownIndicatingInsufficientFunds() {
+        try {
+            // Simulate error message for insufficient funds
+            notification = customer.getLastNotification();
+            assertNotNull(notification, "Customer should receive a notification");
+            assertEquals("Insufficient funds to start the charging session.", notification.getMessage(), "Error message should indicate insufficient funds");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Insufficient funds error check completed.");
+        }
+    }
+
+    @Given("the Charging Point is not operational")
+    public void theChargingPointIsNotOperational() {
+        try {
+            // Initialize a ChargingStation and set the charging point status to "OUT_OF_ORDER"
+            owner.login();
+            chargingStation = new ChargingStation("456 Elm Street", owner);
+            chargingStation.addChargingPoint(new ChargingPoint(ChargingType.DC));
+            chargingStation.chargingPoints.get(0).setStatus(Status.OUT_OF_ORDER);
+
+            // Set the customer with sufficient balance
+            customer = new Customer("John Doe", "john.doe@example.com", "password123");
+            boolean accountCreated = customer.registerAccount();
+            assertTrue(accountCreated, "Customer account should be created");
+
+            prepaidAccount = customer.getPrepaidAccount();
+            prepaidAccount.topUpBalance(50.0); // Ensure there is enough balance
+
+            // Assert that the charging point is non-operational
+            assertEquals(Status.OUT_OF_ORDER, chargingStation.chargingPoints.get(0).getStatus(), "Charging point should be non-operational");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Non-operational charging point setup completed.");
+        }
+    }
+
+    @And("I attempt to start a Charging Session with a not operational Charging Point")
+    public void iAttemptToStartAChargingSessionWithANotOperationalChargingPoint() {
+        try {
+            // Attempt to start the session
+            chargingSession = new ChargingSession();
+
+            // Initialize a ChargingStation with sufficient operational status
+            chargingStation = new ChargingStation("123 Main Street", owner);
+            chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+            chargingStation.chargingPoints.get(0).setStatus(Status.OUT_OF_ORDER);
+
+            // Set customer with insufficient balance
+            customer = new Customer("John Doe", "john.doe@example.com", "password123");
+            boolean accountCreated = customer.registerAccount();
+            assertTrue(accountCreated, "Customer account should be created");
+
+            prepaidAccount = customer.getPrepaidAccount();
+            prepaidAccount.topUpBalance(5.0); // Top up with only $5
+
+            // Try to start the session
+            boolean sessionStarted = chargingSession.startSession(customer, chargingStation, 0);
+            assertFalse(sessionStarted, "Charging session should not start due to insufficient balance");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Attempt to start session with insufficient balance completed.");
+        }
+    }
+
+    @Then("an error is shown indicating the Charging Point is out of order")
+    public void anErrorIsShownIndicatingTheChargingPointIsOutOfOrder() {
+        try {
+            // Attempt to start the session
+
+            boolean sessionStarted = chargingSession.startSession(customer, chargingStation, 0);
+            assertFalse(sessionStarted, "Charging session should not start as the charging point is out of order");
+
+            // Verify that the correct notification is sent to the customer
+            notification = customer.getLastNotification();
+            assertNotNull(notification, "Customer should receive a notification");
+            assertEquals("Charging Point is out of order.", notification.getMessage(), "Notification message should indicate out-of-order status");
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("Out-of-order charging point error check completed.");
+        }
+    }
 
 
 }
