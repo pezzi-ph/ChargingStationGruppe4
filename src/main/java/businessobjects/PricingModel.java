@@ -23,6 +23,9 @@ public class PricingModel {
 
     // Set price for a charging mode
     public void setPrice(ChargingType chargingType, double price) {
+        if (price<0){
+            throw new IllegalArgumentException("Price cannot be negative");
+        }
         prices.put(chargingType, price);
     }
 

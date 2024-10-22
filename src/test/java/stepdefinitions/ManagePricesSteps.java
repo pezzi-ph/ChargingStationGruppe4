@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import businessobjects.*;
+import org.opentest4j.AssertionFailedError;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -86,5 +87,25 @@ public class ManagePricesSteps {
         // Verify that the prices are correctly set
         assertEquals(0.35, price1, 0.001, "Price for " + chargingMode1 + " should be 0.35");
         assertEquals(0.55, price2, 0.001, "Price for " + chargingMode2 + " should be 0.55");
+    }
+
+    @Then("I set the price for Charging Type {string} to the negative ${double} per kWh")
+    public void iSetThePriceForChargingTypeToTheNegative$PerKWh(String chargingType, double price) {
+       assertThrows(IllegalArgumentException.class, () -> pricingModel.setPrice(ChargingType.valueOf(chargingType), price));
+
+    }
+
+    @Then("the PricingModel for Charging Station {string} from {string} to {string} isn't ${double} for {string}")
+    public void thePricingModelForChargingStationFromToIsnT$For(String locationName, String fromDate, String toDate, double price, String chargingType) {
+        Date from = new Date(Integer.parseInt(fromDate.split("\\.")[2]), Integer.parseInt(fromDate.split("\\.")[1]), Integer.parseInt(fromDate.split("\\.")[0]));
+        Date to = new Date(Integer.parseInt(toDate.split("\\.")[2]), Integer.parseInt(toDate.split("\\.")[1]), Integer.parseInt(toDate.split("\\.")[0]));
+        // Verify that the pricing model has been updated
+        assertEquals(locationName, pricingModel.getLocation().getLocation());
+        assertEquals(from, pricingModel.getValidFrom());
+        assertNotNull(pricingModel.getPrices());
+        assertThrows(AssertionFailedError.class, () -> {
+            assertEquals(to, pricingModel.getValidTo());
+            assertEquals(price, pricingModel.getPrices().get(ChargingType.valueOf(chargingType)));
+        });
     }
 }
