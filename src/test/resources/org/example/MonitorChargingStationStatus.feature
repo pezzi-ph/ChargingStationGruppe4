@@ -3,9 +3,9 @@ Feature: Monitoring the Status of Charging Points
   As the Owner,
   I want to monitor the Status of each Charging Point,
   So that I can ensure all Points are functioning properly.
+
   Background:
     Given I logged in as the Station Owner.
-
 
   Scenario: Viewing the Status of each Charging Point
     Given I logged in as the Station Owner.
@@ -16,3 +16,13 @@ Feature: Monitoring the Status of Charging Points
     Given I am viewing the Charging Points
     When I check the Charging Type of each Charging Point
     Then I see whether each Charging Point has the Charging Type "AC" or "DC"
+
+    #################################
+  ########## Error Cases ##########
+  #################################
+
+  Scenario: Charging Point Status Unavailable
+    Given I am logged in as the Station Owner
+    When I try to view the Status of a Charging Point with no available data
+    Then I receive an error message saying "Charging Point Status Unavailable."
+    

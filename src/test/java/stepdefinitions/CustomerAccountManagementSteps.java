@@ -94,8 +94,5 @@ public class CustomerAccountManagementSteps {
         }
     }
 
-    @Then("I receive an error message saying {string}")
-    public void iReceiveAnErrorMessageSaying(String expectedMessage) {
-        assertEquals(expectedMessage, errorMessage);
-    }
+
 }
