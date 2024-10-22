@@ -26,8 +26,8 @@ public class ManagePricesSteps {
         assertTrue(loggedIn, "Owner should be logged in");
     }
 
-    @When("I set the price at Charging Station {string} from {string} to {string} for Charging Mode {string} to ${double} per kWh")
-    public void iSetThePriceAtChargingStationDuringForChargingModeTo$PerKWh(String locationName, String fromDate, String toDate, String chargingMode, double price) {
+    @When("I set the price at Charging Station {string} from {string} to {string} for Charging Type {string} to ${double} per kWh")
+    public void iSetThePriceAtChargingStationFromToForChargingTypeTo$PerKWh(String locationName, String fromDate, String toDate, String chargingMode, double price) {
         // Initialize the Charging Station and PricingModel
         chargingStation = new ChargingStation(locationName,owner);
         Date from = new Date(Integer.parseInt(fromDate.split("\\.")[2]), Integer.parseInt(fromDate.split("\\.")[1]), Integer.parseInt(fromDate.split("\\.")[0]));
@@ -45,14 +45,15 @@ public class ManagePricesSteps {
         pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);
     }
 
-    @Then("the PricingModel for Chargin Station {string} from {string} to {string} is updated")
-    public void thePricingModelForCharginStationDuringIsUpdated(String locationName, String fromDate, String toDate) {
+    @Then("the PricingModel for Charging Station {string} from {string} to {string} is ${double} for {string}")
+    public void thePricingModelForChargingStationFromToIs$For(String locationName, String fromDate, String toDate, double price, String chargingType) {
         Date from = new Date(Integer.parseInt(fromDate.split("\\.")[2]), Integer.parseInt(fromDate.split("\\.")[1]), Integer.parseInt(fromDate.split("\\.")[0]));
         Date to = new Date(Integer.parseInt(toDate.split("\\.")[2]), Integer.parseInt(toDate.split("\\.")[1]), Integer.parseInt(toDate.split("\\.")[0]));
         // Verify that the pricing model has been updated
         assertEquals(locationName, pricingModel.getLocation().getLocation());
         assertEquals(from, pricingModel.getValidFrom());
         assertEquals(to, pricingModel.getValidTo());
+        assertEquals(price, pricingModel.getPrices().get(ChargingType.valueOf(chargingType)));
         assertNotNull(pricingModel.getPrices());
     }
 

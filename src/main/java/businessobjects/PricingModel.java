@@ -8,7 +8,7 @@ public class PricingModel {
     private ChargingStation chargingStation;
     private Date validFrom;
     private Date validTo;
-    private Map<ChargingMode, Double> prices;
+    private Map<ChargingType, Double> prices;
     private ArrayList<Invoice> invoices;
 
 

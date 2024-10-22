@@ -5,8 +5,6 @@ import java.util.UUID;
 public class Invoice {
     String invoiceId;
     double amount;
-
-    private String invoiceId;
     private ChargingSession chargingSession;
     private double totalAmount;
 
@@ -15,6 +13,11 @@ public class Invoice {
         this.chargingSession = session;
         this.totalAmount = session.getCost();
         // Additional invoice generation logic can be added here
+    }
+
+    public Invoice(double amount) {
+        this.invoiceId = UUID.randomUUID().toString();
+        this.totalAmount = amount;
     }
 
     public String getInvoiceId() {
