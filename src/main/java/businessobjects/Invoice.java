@@ -6,18 +6,17 @@ public class Invoice {
     String invoiceId;
     double amount;
     private ChargingSession chargingSession;
-    private double totalAmount;
 
     public Invoice(ChargingSession session) {
         this.invoiceId = java.util.UUID.randomUUID().toString();
         this.chargingSession = session;
-        this.totalAmount = session.getCost();
+        this.amount = session.getCost();
         // Additional invoice generation logic can be added here
     }
 
     public Invoice(double amount) {
         this.invoiceId = UUID.randomUUID().toString();
-        this.totalAmount = amount;
+        this.amount = amount;
     }
 
     public String getInvoiceId() {
