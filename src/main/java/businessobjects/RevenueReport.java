@@ -28,6 +28,9 @@ public class RevenueReport {
     }
 
     public double getRevenue() {
+        if(revenue == 0)
+            throw new IllegalStateException("No revenue data available for the selected time period");
+
         return revenue;
     }
 

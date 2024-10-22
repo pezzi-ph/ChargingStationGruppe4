@@ -2,8 +2,8 @@ package businessobjects;
 
 public class Owner {
 
-    private String username;
-    private String password;
+    private String username = "admin";
+    private String password = "password123";
     private boolean loggedIn;
 
     // Getters and setters
@@ -24,8 +24,8 @@ public class Owner {
         this.password = password;
     }
 
-    public boolean login() {
-        this.loggedIn = true;
+    public boolean login(String username, String password) {
+        this.loggedIn = this.username.equals(username) && this.password.equals(password);
         return loggedIn;
     }
 

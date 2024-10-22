@@ -15,7 +15,7 @@ public class ChargingStation {
     // Constructor
     public ChargingStation(String location, Owner owner) {
         if(!owner.isLoggedIn()){
-            return;
+            throw new IllegalStateException("Please log in to view revenue reports");
         }
         this.stationId = UUID.randomUUID().toString();
         this.location = location;

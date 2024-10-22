@@ -21,7 +21,7 @@ public class MonitorChargingStationStatusSteps {
         owner = new Owner();
         owner.setUsername("admin");
         owner.setPassword("password123");
-        boolean loggedIn = owner.login();
+        boolean loggedIn = owner.login("admin", "password123");
         assertTrue(loggedIn, "Owner should be logged in");
     }
 

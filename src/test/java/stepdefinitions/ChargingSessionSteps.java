@@ -39,7 +39,7 @@ public class ChargingSessionSteps {
     }
     @And("I am at a Charging Point with Operational Status {string}")
     public void iAmAtAChargingPointWithStatus(String status) {
-        owner.login();
+        owner.login("admin", "password123");
         // Initialize a ChargingStation
         chargingStation = new ChargingStation("123 Main Street", owner);
         chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));

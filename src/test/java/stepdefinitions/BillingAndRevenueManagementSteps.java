@@ -7,15 +7,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import businessobjects.*;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Calendar;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class BillingAndRevenueManagementSteps {
     Owner owner;
@@ -25,9 +21,7 @@ public class BillingAndRevenueManagementSteps {
     @Given("I am logged in as the Station Owner")
     public void iAmLoggedInAsTheStationOwner() {
         owner = new Owner();
-        owner.setUsername("admin");
-        owner.setPassword("password123");
-        boolean loggedIn = owner.login();
+        boolean loggedIn = owner.login("admin", "password123");
         assertTrue(loggedIn, "Owner should be logged in");
     }
 
@@ -62,7 +56,6 @@ public class BillingAndRevenueManagementSteps {
     ArrayList<RevenueReport> reports;
     @Given("I need to review revenue")
     public void iNeedToReviewRevenue() {
-        iAmLoggedInAsTheStationOwner();
         reports = new ArrayList<RevenueReport>();
     }
 
@@ -89,5 +82,63 @@ public class BillingAndRevenueManagementSteps {
             r.DisplayReport();
         }
         assertTrue(true);
+    }
+
+    @Given("I am not logged in as the Station Owner")
+    public void iAmNotLoggedInAsTheStationOwner() {
+        owner = new Owner();
+        boolean loggedIn = owner.login("user", "123");
+        assertFalse(loggedIn, "Login should fail");
+    }
+
+
+    String errorMessage;
+    @When("I attempt to generate a Revenue Report for Location {string}")
+    public void iAttemptToGenerateARevenueReportForLocation(String location) {
+        try {
+            station = new ChargingStation("123 Main Street", owner);
+            PricingModel model1 = new PricingModel(station, new Date(), new Date());
+            model1.setPrice(ChargingType.AC, 100);
+            Invoice inv1 = new Invoice(model1.getPrice(ChargingType.AC));
+            model1.pushInvoice(inv1);
+
+            PricingModel[] models = {model1};
+            station.setPricingModels(models);
+
+            report = station.GenerateRevenueReport();
+            reports.add(report);
+        } catch (IllegalStateException e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @Then("I receive an error message {string}")
+    public void iReceiveAnErrorMessage(String expectedMessage) {
+        assertEquals(expectedMessage, errorMessage);
+    }
+
+    @When("I generate a Revenue Report for Location {string} for next month")
+    public void iGenerateARevenueReportForLocationForNextMonth(String location) {
+        station = new ChargingStation(location, owner);
+
+        // Set time period for next month, which will have no data
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 1); // Next month
+        Date futureDate = calendar.getTime();
+
+        PricingModel model = new PricingModel(station, futureDate, futureDate);
+        PricingModel[] models = {model};
+        station.setPricingModels(models);
+    }
+
+    @Then("I see a message {string}")
+    public void iSeeAMessage(String message) {
+        report = station.GenerateRevenueReport();
+
+        try{
+            double rev = report.getRevenue();
+        } catch (IllegalStateException e) {
+            assertEquals(message, e.getMessage());
+        }
     }
 }
