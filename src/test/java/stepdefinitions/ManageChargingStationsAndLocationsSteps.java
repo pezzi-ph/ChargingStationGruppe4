@@ -10,8 +10,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ManageChargingStationsAndLocationsSteps {
     private Owner owner;
@@ -54,13 +53,13 @@ public class ManageChargingStationsAndLocationsSteps {
         }
     }
 
-    @When("I assign the Charging Mode {string} to Charging Point {int}")
-    public void iAssignTheChargingModeToChargingPoint(String chargingType, int index) {
+    @When("I assign the Charging Type {string} to Charging Point {int}")
+    public void iAssignTheChargingTypeToChargingPoint(String chargingType, int index) {
         chargingStation.chargingPoints.get(index).setChargingType(ChargingType.valueOf(chargingType));
     }
 
-    @Then("Charging Point {int} at {string} has the Charging Mode {string}")
-    public void chargingPointAtHasTheChargingMode(int index, String location, String chargingType) {
+    @Then("Charging Point {int} at {string} has the Charging Type {string}")
+    public void chargingPointAtHasTheChargingType(int index, String location, String chargingType) {
         assertEquals(chargingStation.getLocation(), location);
         assertEquals(chargingStation.chargingPoints.get(index).getChargingType(), ChargingType.valueOf(chargingType));
     }
@@ -86,5 +85,28 @@ public class ManageChargingStationsAndLocationsSteps {
         assertEquals(chargingStation.getLocation(), location);
         assertEquals(chargingStation.chargingPoints.get(index).getStatus(), Status.valueOf(status));
 
+    }
+
+    @Then("Charging Point {int} at {string} doesn't have the Charging Type {string}")
+    public void chargingPointAtDoesnTHaveTheChargingType(int index, String location, String chargingType) {
+        assertEquals(chargingStation.getLocation(), location);
+        try {
+            assertNotEquals(chargingStation.chargingPoints.get(index).getChargingType(), ChargingType.valueOf(chargingType));
+        }
+        catch (Exception e){
+            assertTrue(true);
+        }
+    }
+
+
+    @Then("the Charging Station {string} isn't added with {int} Charging Points of type {string}")
+    public void theChargingStationIsnTAddedWithChargingPointsOfType(String location, int size, String chargingType) {
+        assertEquals(chargingStation.getLocation(), location);
+        try {
+            assertTrue(chargingStation.chargingPoints.size()!=size || !chargingStation.chargingPoints.stream().allMatch(x-> x.getChargingType().equals(ChargingType.valueOf(chargingType))));
+        }
+        catch (Exception e){
+            assertTrue(true);
+        }
     }
 }
