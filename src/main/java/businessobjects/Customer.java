@@ -35,8 +35,9 @@ public class Customer {
         }
     }
 
-    public void linkPaymentMethod(String cardType, String cardNumber, String expiryDate, String cvv) {
+    public boolean linkPaymentMethod(String cardType, String cardNumber, String expiryDate, String cvv) {
         // Simulate linking a payment method.
+        return true;
     }
 
     public void topUpBalance(double amount) {
