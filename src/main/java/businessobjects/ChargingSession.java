@@ -43,7 +43,7 @@ public class ChargingSession {
         }
 
         // Check if the customer has sufficient balance (assuming $20 is the minimum balance required)
-        if (!customer.getPrepaidAccount().hasSufficientBalance(20.0)) {
+        if (customer.getPrepaidAccount().getBalance() < 20.0) {
             customer.receiveNotification(new Notification("Insufficient funds to start the charging session."));
             return false; // The session should not start due to insufficient funds
         }
