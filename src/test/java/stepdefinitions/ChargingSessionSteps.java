@@ -107,7 +107,7 @@ public class ChargingSessionSteps {
 
         for (ChargingSession session : chargingHistory) {
             // Verify the details
-            assertNotNull(session.getChargingType(), "Charging mode should not be null");
+            assertNotNull(session.getChargingType(), "Charging type should not be null");
             assertTrue(session.getUsedEnergy() > 0, "Used energy should be greater than zero");
             assertTrue(session.getCost() > 0, "Cost should be greater than zero");
             assertTrue(session.getDuration() > 0, "Duration should be greater than zero");
