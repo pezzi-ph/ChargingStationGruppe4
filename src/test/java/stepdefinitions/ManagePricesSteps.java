@@ -7,6 +7,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import businessobjects.*;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagePricesSteps {
@@ -23,11 +26,13 @@ public class ManagePricesSteps {
         assertTrue(loggedIn, "Owner should be logged in");
     }
 
-    @When("I set the price at Charging Station {string} during {string} for Charging Type {string} to ${double} per kWh")
-    public void iSetThePriceAtChargingStationDuringForChargingModeTo$PerKWh(String locationName, String timePeriod, String chargingMode, double price) {
+    @When("I set the price at Charging Station {string} from {string} to {string} for Charging Type {string} to ${double} per kWh")
+    public void iSetThePriceAtChargingStationFromToForChargingTypeTo$PerKWh(String locationName, String fromDate, String toDate, String chargingMode, double price) {
         // Initialize the Charging Station and PricingModel
         chargingStation = new ChargingStation(locationName,owner);
-        pricingModel = new PricingModel(chargingStation, timePeriod);
+        Date from = new Date(Integer.parseInt(fromDate.split("\\.")[2]), Integer.parseInt(fromDate.split("\\.")[1]), Integer.parseInt(fromDate.split("\\.")[0]));
+        Date to = new Date(Integer.parseInt(toDate.split("\\.")[2]), Integer.parseInt(toDate.split("\\.")[1]), Integer.parseInt(toDate.split("\\.")[0]));
+        pricingModel = new PricingModel(chargingStation, from, to);
 
         // Set the price for the specified charging type
         pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);
@@ -40,20 +45,24 @@ public class ManagePricesSteps {
         pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);
     }
 
-    @Then("the PricingModel for Charging Station {string} during {string} is ${double} for {string}")
-    public void thePricingModelForChargingStationDuringIsFor(String locationName, String timePeriod, double price, String type) {
-        // Verify that the pricing type has been updated
+    @Then("the PricingModel for Charging Station {string} from {string} to {string} is ${double} for {string}")
+    public void thePricingModelForChargingStationFromToIs$For(String locationName, String fromDate, String toDate, double price, String chargingType) {
+        Date from = new Date(Integer.parseInt(fromDate.split("\\.")[2]), Integer.parseInt(fromDate.split("\\.")[1]), Integer.parseInt(fromDate.split("\\.")[0]));
+        Date to = new Date(Integer.parseInt(toDate.split("\\.")[2]), Integer.parseInt(toDate.split("\\.")[1]), Integer.parseInt(toDate.split("\\.")[0]));
+        // Verify that the pricing model has been updated
         assertEquals(locationName, pricingModel.getLocation().getLocation());
-        assertEquals(timePeriod, pricingModel.getTimePeriod());
-        assertEquals(pricingModel.getPrices().get(ChargingType.valueOf(type)),price);
+        assertEquals(from, pricingModel.getValidFrom());
+        assertEquals(to, pricingModel.getValidTo());
+        assertEquals(price, pricingModel.getPrices().get(ChargingType.valueOf(chargingType)));
+        assertNotNull(pricingModel.getPrices());
     }
 
     @Given("I have a PricingModel for Charging Station {string}")
     public void iHaveAPricingModelForChargingStation(String locationName) {
         iAmLoggedInAsTheOwner();
         // Initialize the Charging Station and PricingModel
-        chargingStation = new ChargingStation(locationName, owner);
-        pricingModel = new PricingModel(chargingStation, "Default Time");
+        chargingStation = new ChargingStation(locationName,owner);
+        pricingModel = new PricingModel(chargingStation, new Date(), new Date());
     }
 
     @When("I assign the price to Charging Type {string}")
