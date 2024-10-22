@@ -4,9 +4,12 @@ import businessobjects.*;
 import enums.ChargingType;
 import enums.Status;
 import io.cucumber.java.en.*;
+import org.junit.jupiter.api.Assertions;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MonitorChargingStationStatusSteps {
     private Owner owner;
@@ -55,4 +58,40 @@ public class MonitorChargingStationStatusSteps {
         assertEquals(chargingStation.chargingPoints.get(1).getStatus(), Status.valueOf(arg1));
         assertEquals(chargingStation.chargingPoints.get(2).getStatus(), Status.valueOf(arg2));
     }
+
+
+
+
+    private List<ChargingType> chargingTypes;
+
+
+
+    @Given("I am viewing the Charging Points")
+    public void iAmViewingTheChargingPoints() {
+        chargingStation = new ChargingStation("123 Main Street",owner);
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.DC));
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.DC));
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.DC));
+        chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
+    }
+
+    @When("I check the Charging Type of each Charging Point")
+    public void iCheckTheChargingTypeOfEachChargingPoint() {
+        chargingTypes = chargingStation.chargingPoints.stream().map(ChargingPoint::getChargingType).collect(Collectors.toList());
+    }
+
+    @Then("I see whether each Charging Point has the Charging Type {string} or {string}")
+    public void iSeeWhetherEachChargingPointHasTheChargingTypeOr(String arg0, String arg1) {
+        try {
+            Object type1 = ChargingType.valueOf(arg0);
+            Object type2 = ChargingType.valueOf(arg1);
+            chargingTypes.forEach(x -> assertTrue(type1 == x || type2 == x));
+        }catch (Exception e) {
+            Assertions.fail("Invalid Charging Type ");
+        }
+    }
+    
 }
