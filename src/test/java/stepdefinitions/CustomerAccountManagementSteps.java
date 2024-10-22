@@ -1,6 +1,7 @@
 package stepdefinitions;
 
 import businessobjects.Customer;
+import businessobjects.PrepaidAccount;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CustomerAccountManagementSteps {
     private Customer customer;
     private boolean accountCreated;
+    private PrepaidAccount prepaidAccount;
 
     @Given("I am on the registration page")
     public void iAmOnTheRegistrationPage() {
@@ -46,19 +48,24 @@ public class CustomerAccountManagementSteps {
         customer.setPassword("MaxMusterMann");
         accountCreated = customer.registerAccount();
         assertTrue(accountCreated, "Customer account should be created");
+
+        prepaidAccount = new PrepaidAccount();
     }
 
     @When("I link my payment method")
     public void iLinkMyPaymentMethod() {
-
+        boolean paymentLinked = customer.linkPaymentMethod("Credit Card", "1234-5678-9101-1121", "12/25", "000");
+        assertTrue(paymentLinked, "Payment method linked successfully");
     }
 
     @And("I perform a Balance Top-Up of ${int} to my Prepaid Account")
-    public void iPerformABalanceTopUpOf$ToMyPrepaidAccount(int arg0) {
-
+    public void iPerformABalanceTopUpOf$ToMyPrepaidAccount(int amount) {
+        prepaidAccount.topUpBalance(amount);
     }
 
     @Then("my balance in the Prepaid Account increases by ${int}")
-    public void myBalanceInThePrepaidAccountIncreasesBy$(int arg0) {
+    public void myBalanceInThePrepaidAccountIncreasesBy$(int amount) {
+        double expectedBalance = prepaidAccount.getBalance();
+        assertEquals(expectedBalance, amount, "Prepaid account balance should match the topped-up amount.");
     }
 }
