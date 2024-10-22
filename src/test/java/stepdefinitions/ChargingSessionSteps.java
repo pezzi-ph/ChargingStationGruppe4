@@ -159,6 +159,7 @@ public class ChargingSessionSteps {
             chargingSession = new ChargingSession();
 
             // Initialize a ChargingStation with sufficient operational status
+            owner.login("admin", "password123");
             chargingStation = new ChargingStation("123 Main Street", owner);
             chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
             chargingStation.chargingPoints.get(0).setStatus(Status.AVAILABLE);
@@ -169,7 +170,7 @@ public class ChargingSessionSteps {
             assertTrue(accountCreated, "Customer account should be created");
 
             prepaidAccount = customer.getPrepaidAccount();
-            prepaidAccount.topUpBalance(5.0); // Top up with only $5
+            prepaidAccount.topUpBalance(5.0);
 
             // Try to start the session
             boolean sessionStarted = chargingSession.startSession(customer, chargingStation, 0);
