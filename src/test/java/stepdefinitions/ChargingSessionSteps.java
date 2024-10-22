@@ -24,7 +24,7 @@ public class ChargingSessionSteps {
 
     // Step definitions will be implemented below
     @Given("I have sufficient balance in my Prepaid Account")
-    public void iHaveSufficientBalanceInMyPrepaidAccount() {
+    public void iHaveSufficientBalanceInMyPrepaidAccount() throws Exception {
         // Initialize customer and prepaid account
         customer = new Customer("John Doe", "john.doe@example.com", "password123");
         boolean accountCreated = customer.registerAccount();
@@ -117,7 +117,7 @@ public class ChargingSessionSteps {
 
 
     @Given("I have insufficient balance in my Prepaid Account")
-    public void iHaveInsufficientBalanceInMyPrepaidAccount() {
+    public void iHaveInsufficientBalanceInMyPrepaidAccount() throws Exception {
         // Initialize customer and prepaid account
         customer = new Customer("John Doe", "john.doe@example.com", "password123");
         boolean accountCreated = customer.registerAccount();
@@ -200,7 +200,7 @@ public class ChargingSessionSteps {
     public void theChargingPointIsNotOperational() {
         try {
             // Initialize a ChargingStation and set the charging point status to "OUT_OF_ORDER"
-            owner.login();
+            owner.login("admin", "password123");
             chargingStation = new ChargingStation("456 Elm Street", owner);
             chargingStation.addChargingPoint(new ChargingPoint(ChargingType.DC));
             chargingStation.chargingPoints.get(0).setStatus(Status.OUT_OF_ORDER);

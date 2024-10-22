@@ -53,19 +53,49 @@ public class CustomerAccountManagementSteps {
     }
 
     @When("I link my payment method")
-    public void iLinkMyPaymentMethod() {
-        boolean paymentLinked = customer.linkPaymentMethod("Credit Card", "1234-5678-9101-1121", "12/25", "000");
-        assertTrue(paymentLinked, "Payment method linked successfully");
+    public void iLinkMyPaymentMethod() throws Exception {
+        try
+        {
+            boolean paymentLinked = customer.linkPaymentMethod("Credit Card", "1234-5678-9101-1121", "12/25", "000");
+        }
+        catch(Exception e)
+        {
+            fail();
+        }
     }
 
     @And("I perform a Balance Top-Up of ${int} to my Prepaid Account")
-    public void iPerformABalanceTopUpOf$ToMyPrepaidAccount(int amount) {
-        prepaidAccount.topUpBalance(amount);
+    public void iPerformABalanceTopUpOf$ToMyPrepaidAccount(int amount) throws Exception {
+        try
+        {
+            prepaidAccount.topUpBalance(amount);
+        }
+        catch (Exception e) {
+            errorMessage = e.getMessage();
+        }
     }
 
     @Then("my balance in the Prepaid Account increases by ${int}")
     public void myBalanceInThePrepaidAccountIncreasesBy$(int amount) {
         double expectedBalance = prepaidAccount.getBalance();
         assertEquals(expectedBalance, amount, "Prepaid account balance should match the topped-up amount.");
+    }
+
+    String errorMessage;
+    @When("I attempt to link an invalid payment method")
+    public void iAttemptToLinkAnInvalidPaymentMethod() {
+        try
+        {
+            boolean paymentLinked = customer.linkPaymentMethod("Credit Card", "invalid-card-number", "12/25", "000");
+        }
+        catch(Exception e)
+        {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @Then("I receive an error message saying {string}")
+    public void iReceiveAnErrorMessageSaying(String expectedMessage) {
+        assertEquals(expectedMessage, errorMessage);
     }
 }

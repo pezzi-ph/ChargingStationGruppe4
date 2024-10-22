@@ -8,11 +8,12 @@ public class PrepaidAccount {
         this.balance = 0.0;
     }
 
-    public void topUpBalance(double amount) {
+    public void topUpBalance(double amount) throws Exception {
         if (amount > 0) {
             balance += amount;
         }
         // Fehler bei negativen Values
+        throw new Exception("Invalid top-up amount");
     }
 
     public double getBalance() {

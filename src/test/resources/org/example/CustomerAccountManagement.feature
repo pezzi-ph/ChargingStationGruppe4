@@ -15,3 +15,13 @@ Feature: Registration and Management of Customer Accounts and Prepaid Accounts
     When I link my payment method
     And I perform a Balance Top-Up of $50 to my Prepaid Account
     Then my balance in the Prepaid Account increases by $50
+
+  Scenario: Linking an invalid payment method
+    Given I am logged into my Customer account
+    When I attempt to link an invalid payment method
+    Then I receive an error message saying "Payment method could not be linked"
+
+  Scenario: Attempting to top up Prepaid Account with an invalid amount
+    Given I am logged into my Customer account
+    When I perform a Balance Top-Up of $-50 to my Prepaid Account
+    Then I receive an error message saying "Invalid top-up amount"

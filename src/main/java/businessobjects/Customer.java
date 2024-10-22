@@ -35,12 +35,19 @@ public class Customer {
         }
     }
 
-    public boolean linkPaymentMethod(String cardType, String cardNumber, String expiryDate, String cvv) {
-        // Simulate linking a payment method.
+    public boolean linkPaymentMethod(String cardType, String cardNumber, String expiryDate, String cvv) throws Exception {
+        // Regular expression to match the card number format: "1234-5678-9101-1121"
+        String cardNumberPattern = "\\d{4}-\\d{4}-\\d{4}-\\d{4}";
+
+        if (!cardNumber.matches(cardNumberPattern)) {
+            throw new Exception("Payment method could not be linked");
+        }
+
+        // Simulate linking a payment method if the card number format is valid
         return true;
     }
 
-    public void topUpBalance(double amount) {
+    public void topUpBalance(double amount) throws Exception {
         prepaidAccount.topUpBalance(amount);
     }
 
