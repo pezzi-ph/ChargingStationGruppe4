@@ -19,9 +19,9 @@ Feature: Registration and Management of Customer Accounts and Prepaid Accounts
   Scenario: Linking an invalid payment method
     Given I am logged into my Customer account
     When I attempt to link an invalid payment method
-    Then I receive an error message saying "Payment method could not be linked"
+    Then I receive an error message saying this "Payment method could not be linked"
 
   Scenario: Attempting to top up Prepaid Account with an invalid amount
     Given I am logged into my Customer account
     When I perform a Balance Top-Up of $-50 to my Prepaid Account
-    Then I receive an error message saying "Invalid top-up amount"
+    Then I receive an error message saying this "Invalid top-up amount"
