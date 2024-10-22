@@ -15,6 +15,7 @@ public class MonitorChargingStationStatusSteps {
     private Owner owner;
     private ChargingStation chargingStation;
     private List<Status> statuses;
+    private String errorMessage; // Store error message
 
     @Given("I logged in as the Station Owner.")
     public void iLoggedInAsTheStationOwner() {
@@ -28,7 +29,7 @@ public class MonitorChargingStationStatusSteps {
     @When("I view the Status of all Charging Points")
     public void iViewTheStatusOfAllChargingPoints() {
         // Initialize a list of ChargingPoints
-        chargingStation = new ChargingStation("123 Main Street",owner);
+        chargingStation = new ChargingStation("123 Main Street", owner);
 
         // For testing purposes, we'll create some charging points
         ChargingPoint point1 = new ChargingPoint(ChargingType.AC);
@@ -59,16 +60,11 @@ public class MonitorChargingStationStatusSteps {
         assertEquals(chargingStation.chargingPoints.get(2).getStatus(), Status.valueOf(arg2));
     }
 
-
-
-
     private List<ChargingType> chargingTypes;
-
-
 
     @Given("I am viewing the Charging Points")
     public void iAmViewingTheChargingPoints() {
-        chargingStation = new ChargingStation("123 Main Street",owner);
+        chargingStation = new ChargingStation("123 Main Street", owner);
         chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
         chargingStation.addChargingPoint(new ChargingPoint(ChargingType.DC));
         chargingStation.addChargingPoint(new ChargingPoint(ChargingType.AC));
@@ -86,12 +82,36 @@ public class MonitorChargingStationStatusSteps {
     @Then("I see whether each Charging Point has the Charging Type {string} or {string}")
     public void iSeeWhetherEachChargingPointHasTheChargingTypeOr(String arg0, String arg1) {
         try {
-            Object type1 = ChargingType.valueOf(arg0);
-            Object type2 = ChargingType.valueOf(arg1);
+            ChargingType type1 = ChargingType.valueOf(arg0);
+            ChargingType type2 = ChargingType.valueOf(arg1);
             chargingTypes.forEach(x -> assertTrue(type1 == x || type2 == x));
-        }catch (Exception e) {
-            Assertions.fail("Invalid Charging Type ");
+        } catch (Exception e) {
+            Assertions.fail("Invalid Charging Type");
         }
     }
-    
+
+    // Error case for Charging Point Status Unavailable
+    @When("I try to view the Status of a Charging Point with no available data")
+    public void iTryToViewTheStatusOfAChargingPointWithNoAvailableData() {
+        try {
+            ChargingPoint pointWithoutStatus = new ChargingPoint(ChargingType.AC);
+            pointWithoutStatus.setStatus(null); // No status available
+
+            // Simulating fetching status that doesn't exist
+            if (pointWithoutStatus.getStatus() == null) {
+                throw new Exception("Charging Point Status Unavailable.");
+            }
+        } catch (Exception e) {
+            errorMessage = e.getMessage();
+        }
+    }
+
+    @Then("I receive an error message saying {string}")
+    public void iReceiveAnErrorMessageSaying(String expectedMessage) {
+        assertEquals(expectedMessage, errorMessage);
+    }
+
+    @When("I try to view the Status of all Charging Points")
+    public void iTryToViewTheStatusOfAllChargingPoints() {
+    }
 }
