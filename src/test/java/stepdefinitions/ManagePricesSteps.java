@@ -8,7 +8,6 @@ import io.cucumber.java.en.When;
 import businessobjects.*;
 import org.opentest4j.AssertionFailedError;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,8 +51,8 @@ public class ManagePricesSteps {
         assertEquals(locationName, pricingModel.getLocation().getLocation());
         assertEquals(from, pricingModel.getValidFrom());
         assertEquals(to, pricingModel.getValidTo());
-        assertEquals(price, pricingModel.getPrices().get(ChargingType.valueOf(chargingType)));
-        assertNotNull(pricingModel.getPrices());
+        assertEquals(price, pricingModel.getChargingPrices().get(ChargingType.valueOf(chargingType)));
+        assertNotNull(pricingModel.getChargingPrices());
     }
 
     @Given("I have a PricingModel for Charging Station {string}")
@@ -100,10 +99,10 @@ public class ManagePricesSteps {
         // Verify that the pricing model has been updated
         assertEquals(locationName, pricingModel.getLocation().getLocation());
         assertEquals(from, pricingModel.getValidFrom());
-        assertNotNull(pricingModel.getPrices());
+        assertNotNull(pricingModel.getChargingPrices());
         assertThrows(AssertionFailedError.class, () -> {
             assertEquals(to, pricingModel.getValidTo());
-            assertEquals(price, pricingModel.getPrices().get(ChargingType.valueOf(chargingType)));
+            assertEquals(price, pricingModel.getChargingPrices().get(ChargingType.valueOf(chargingType)));
         });
     }
 }

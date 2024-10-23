@@ -8,7 +8,8 @@ public class PricingModel {
     private ChargingStation chargingStation;
     private Date validFrom;
     private Date validTo;
-    private Map<ChargingType, Double> prices;
+    private Map<ChargingType, Double> chargingPrices;
+    private Map<ChargingType, Double> parkingPrices;
     private ArrayList<Invoice> invoices;
 
 
@@ -17,7 +18,8 @@ public class PricingModel {
         this.chargingStation = chargingStation;
         this.validFrom = validFrom;
         this.validTo = validTo;
-        this.prices = new HashMap<>();
+        this.chargingPrices = new HashMap<>();
+        this.parkingPrices = new HashMap<>();
         this.invoices = new ArrayList<>();
     }
 
@@ -26,12 +28,12 @@ public class PricingModel {
         if (price<0){
             throw new IllegalArgumentException("Price cannot be negative");
         }
-        prices.put(chargingType, price);
+        chargingPrices.put(chargingType, price);
     }
 
     // Get price for a charging mode
     public double getPrice(ChargingType chargingType) {
-        return prices.getOrDefault(chargingType, 0.0);
+        return chargingPrices.getOrDefault(chargingType, 0.0) + parkingPrices.getOrDefault(chargingType, 0.0);
     }
 
     // Getters
@@ -39,8 +41,8 @@ public class PricingModel {
         return chargingStation;
     }
 
-    public Map<ChargingType, Double> getPrices() {
-        return prices;
+    public Map<ChargingType, Double> getChargingPrices() {
+        return chargingPrices;
     }
 
     public List<Invoice> getInvoices() {

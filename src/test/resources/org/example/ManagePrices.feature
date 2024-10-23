@@ -8,7 +8,8 @@ Feature: Creating and Updating Prices for Charging Types
     Given I am logged in as the Owner
     When I set the price at Charging Station "Gasse 11" from "1.1.2024" to "31.10.2024" for Charging Type "AC" to $0.30 per kWh
     Then the PricingModel for Charging Station "Gasse 11" from "1.1.2024" to "31.10.2024" is $0.30 for "AC"
-    And I set the price for Charging Type "DC" to $0.50 per kWh
+
+    When I set the price for Charging Type "DC" to $0.50 per kWh
     Then the PricingModel for Charging Station "Gasse 11" from "1.1.2024" to "31.10.2024" is $0.50 for "DC"
 
   Scenario: Assigning prices to Charging Types
