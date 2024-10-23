@@ -17,7 +17,7 @@ Feature: Monitoring the Status of Charging Points
     When I check the Charging Type of each Charging Point
     Then I see whether each Charging Point has the Charging Type "AC" or "DC"
 
-    #################################
+  #################################
   ########## Error Cases ##########
   #################################
 

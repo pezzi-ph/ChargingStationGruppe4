@@ -21,7 +21,7 @@ Feature: Conducting Charging Sessions and Viewing Charging History
     When I view my charging history
     Then I see details of each Charging Session including Location, Charging Mode, energy used (in kWh), cost, duration, and Invoice details
 
-    #################################
+  #################################
   ########## Error Cases ##########
   #################################
 

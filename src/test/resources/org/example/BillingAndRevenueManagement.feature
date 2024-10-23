@@ -17,6 +17,10 @@ Feature: Viewing Revenue Reports and Invoices
     When I generate a Revenue Report
     Then I receive a report summarizing total revenue by Location, Charging Mode, and time period
 
+  #################################
+  ########## Error Cases ##########
+  #################################
+
   Scenario: Viewing Revenue Report without being logged in
     Given I am not logged in as the Station Owner
     When I attempt to generate a Revenue Report for Location "123 Main Street"

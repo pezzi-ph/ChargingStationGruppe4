@@ -30,6 +30,7 @@ Feature: Managing Charging Stations and Point
   #################################
   ########## Error Cases ##########
   #################################
+
   Scenario: Assigning Charging Types to Charging Points
     Given the Charging Station "123 Main Street" has 5 Charging Points
     When I assign the Charging Type "DC" to Charging Point 1
