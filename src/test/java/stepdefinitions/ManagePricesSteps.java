@@ -33,14 +33,14 @@ public class ManagePricesSteps {
         pricingModel = new PricingModel(chargingStation, from, to);
 
         // Set the price for the specified charging type
-        pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);
+        pricingModel.setChargingPrice(ChargingType.valueOf(chargingMode), price);
     }
 
 
     @And("I set the price for Charging Type {string} to ${double} per kWh")
     public void iSetThePriceForChargingModeTo$PerKWh(String chargingMode, double price) {
         // Set the price for the specified charging type
-        pricingModel.setPrice(ChargingType.valueOf(chargingMode), price);
+        pricingModel.setChargingPrice(ChargingType.valueOf(chargingMode), price);
     }
 
     @Then("the PricingModel for Charging Station {string} from {string} to {string} is ${double} for {string}")
@@ -67,13 +67,13 @@ public class ManagePricesSteps {
     public void iAssignThePriceToChargingMode(String chargingMode) {
         // Assign a price to the charging type
         // For example, set a default price
-        pricingModel.setPrice(ChargingType.valueOf(chargingMode), 0.35);
+        pricingModel.setChargingPrice(ChargingType.valueOf(chargingMode), 0.35);
     }
 
     @And("I assign a different price to Charging Type {string}")
     public void iAssignADifferentPriceToChargingMode(String chargingMode) {
         // Assign a different price to the charging type
-        pricingModel.setPrice(ChargingType.valueOf(chargingMode), 0.55);
+        pricingModel.setChargingPrice(ChargingType.valueOf(chargingMode), 0.55);
     }
 
     @Then("the PricingModel reflects the assigned prices for Charging Types {string} and {string}")
@@ -88,7 +88,7 @@ public class ManagePricesSteps {
 
     @Then("I set the price for Charging Type {string} to the negative ${double} per kWh")
     public void iSetThePriceForChargingTypeToTheNegative$PerKWh(String chargingType, double price) {
-       assertThrows(IllegalArgumentException.class, () -> pricingModel.setPrice(ChargingType.valueOf(chargingType), price));
+       assertThrows(IllegalArgumentException.class, () -> pricingModel.setChargingPrice(ChargingType.valueOf(chargingType), price));
 
     }
 

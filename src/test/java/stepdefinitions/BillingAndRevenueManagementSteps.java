@@ -34,12 +34,12 @@ public class BillingAndRevenueManagementSteps {
         Date pastDate = calendar.getTime();
 
         PricingModel model1 = new PricingModel(station, pastDate, new Date());
-        model1.setPrice(ChargingType.AC, 100);
+        model1.setChargingPrice(ChargingType.AC, 100);
         Invoice inv1 = new Invoice(model1.getPrice(ChargingType.AC));
         model1.pushInvoice(inv1);
 
         PricingModel model2 = new PricingModel(station, pastDate, new Date());
-        model2.setPrice(ChargingType.DC, 99);
+        model2.setChargingPrice(ChargingType.DC, 99);
         Invoice inv2 = new Invoice(model2.getPrice(ChargingType.DC));
         model2.pushInvoice(inv2);
 
@@ -64,7 +64,7 @@ public class BillingAndRevenueManagementSteps {
     public void iGenerateARevenueReport() {
         station = new ChargingStation("123 Main Street", owner);
         PricingModel model1 = new PricingModel(station, new Date(), new Date());
-        model1.setPrice(ChargingType.AC, 100);
+        model1.setChargingPrice(ChargingType.AC, 100);
         Invoice inv1 = new Invoice(model1.getPrice(ChargingType.AC));
         model1.pushInvoice(inv1);
 
@@ -98,7 +98,7 @@ public class BillingAndRevenueManagementSteps {
         try {
             station = new ChargingStation("123 Main Street", owner);
             PricingModel model1 = new PricingModel(station, new Date(), new Date());
-            model1.setPrice(ChargingType.AC, 100);
+            model1.setChargingPrice(ChargingType.AC, 100);
             Invoice inv1 = new Invoice(model1.getPrice(ChargingType.AC));
             model1.pushInvoice(inv1);
 
