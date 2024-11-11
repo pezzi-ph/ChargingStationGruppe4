@@ -6,6 +6,13 @@ public class Owner {
     private String password = "password123";
     private boolean loggedIn;
 
+    public Owner(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+    public Owner() {}
+
+
     // Getters and setters
 
     public String getUsername() {
@@ -31,5 +38,13 @@ public class Owner {
 
     public boolean isLoggedIn() {
         return loggedIn;
+    }
+
+
+    @Override
+    public String toString() {
+        return "\nOwner{\n" +
+                "username='" + username + '\'' +
+                "\n}";
     }
 }

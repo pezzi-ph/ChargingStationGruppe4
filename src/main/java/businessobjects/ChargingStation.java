@@ -51,4 +51,13 @@ public class ChargingStation {
         report.setRevenue(revenue);
         return report;
     }
+
+    @Override
+    public String toString() {
+        return "\nChargingStation{\n" +
+                "stationId='" + stationId + '\'' +
+                ", location='" + location + '\'' +
+                ", chargingPoints=" + chargingPoints +
+                "\n}";
+    }
 }

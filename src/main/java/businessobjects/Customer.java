@@ -86,7 +86,6 @@ public class Customer {
     }
 
     public void setEmail(String email) {
-        // You may add email validation logic here.
         this.email = email;
     }
 
@@ -101,5 +100,15 @@ public class Customer {
 
     public void setPrepaidAccount(PrepaidAccount prepaidAccount) {
         this.prepaidAccount = prepaidAccount;
+    }
+
+
+    @Override
+    public String toString() {
+        return "\nCustomer{\n" +
+                "email='" + email + '\'' +
+                ", name='" + name + '\'' +
+                ", customerId='" + customerId + '\'' +
+                "\n}";
     }
 }

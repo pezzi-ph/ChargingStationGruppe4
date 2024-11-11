@@ -11,7 +11,6 @@ public class Invoice {
         this.invoiceId = java.util.UUID.randomUUID().toString();
         this.chargingSession = session;
         this.amount = session.getCost();
-        // Additional invoice generation logic can be added here
     }
 
     public Invoice(double amount) {
