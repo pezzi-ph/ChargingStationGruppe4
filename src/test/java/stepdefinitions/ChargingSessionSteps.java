@@ -9,6 +9,7 @@ import javax.xml.stream.Location;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Date;
 import java.util.List;
 
 public class ChargingSessionSteps {
@@ -52,6 +53,7 @@ public class ChargingSessionSteps {
     public void iStartAChargingSessionUsingMyCustomerIDAtTheChargingPoint() {
         // Start a ChargingSession
         chargingSession = new ChargingSession();
+        chargingStation.setPricingModels(new PricingModel[]{new PricingModel(new Date(System.currentTimeMillis()-24*60*60*1000), new Date(System.currentTimeMillis()+24*60*60*1000)) });
         boolean sessionStarted = chargingSession.startSession(customer, chargingStation, 0);
         assertTrue(sessionStarted, "Charging session should start successfully");
     }

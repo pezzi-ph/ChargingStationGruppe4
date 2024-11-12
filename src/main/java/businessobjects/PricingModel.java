@@ -8,14 +8,22 @@ public class PricingModel {
     private ChargingStation chargingStation;
     private Date validFrom;
     private Date validTo;
-    private Map<ChargingType, Double> chargingPrices;
-    private Map<ChargingType, Double> parkingPrices;
+    public Map<ChargingType, Double> chargingPrices;
+    public Map<ChargingType, Double> parkingPrices;
     private ArrayList<Invoice> invoices;
 
 
     // Constructor
     public PricingModel(ChargingStation chargingStation, Date validFrom, Date validTo) {
         this.chargingStation = chargingStation;
+        this.validFrom = validFrom;
+        this.validTo = validTo;
+        this.chargingPrices = new HashMap<>();
+        this.parkingPrices = new HashMap<>();
+        this.invoices = new ArrayList<>();
+    }
+
+    public PricingModel( Date validFrom, Date validTo) {
         this.validFrom = validFrom;
         this.validTo = validTo;
         this.chargingPrices = new HashMap<>();
@@ -68,4 +76,14 @@ public class PricingModel {
         return validTo;
     }
 
+
+    @Override
+    public String toString() {
+        return "PricingModel{" +
+                "validFrom=" + validFrom +
+                ", validTo=" + validTo +
+                ", chargingPrices=" + chargingPrices +
+                ", parkingPrices=" + parkingPrices +
+                '}';
+    }
 }

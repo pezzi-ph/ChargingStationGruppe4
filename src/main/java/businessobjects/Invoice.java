@@ -33,4 +33,14 @@ public class Invoice {
     public void setAmount(double amount) {
         this.amount = amount;
     }
+
+
+    @Override
+    public String toString() {
+        return "\nInvoice{\n" +
+                "invoiceId='" + invoiceId + '\'' +
+                ", amount=" + amount +
+                ", chargingSession=" + chargingSession +
+                "\n}";
+    }
 }

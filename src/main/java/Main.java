@@ -1,10 +1,8 @@
-import businessobjects.ChargingPoint;
-import businessobjects.ChargingStation;
-import businessobjects.Customer;
-import businessobjects.Owner;
+import businessobjects.*;
 import enums.ChargingType;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Main {
     ArrayList<Customer> Customers;
@@ -18,6 +16,12 @@ public class Main {
             add(new Customer("Dave D","Dave@gmail.com", "asdf"));
             add(new Customer("Elfi E","Elfi@gmail.com", "0000"));
         }};
+        Customers.get(0).registerAccount();
+        try {
+            Customers.get(0).topUpBalance(200);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         ArrayList<Owner> owners = new ArrayList<Owner>(){{
             add(new Owner("Franz F", "passwort1234"));
@@ -46,10 +50,26 @@ public class Main {
         stations.get(2).chargingPoints.add(new ChargingPoint(ChargingType.AC, "AC Nr 4"));
 
 
-        System.out.println(Customers.toString());
+        stations.get(0).setPricingModels(new PricingModel[]{new PricingModel(new Date(System.currentTimeMillis()-24*60*60*1000), new Date(System.currentTimeMillis()+24*60*60*1000)) });
+        stations.get(0).pricingModels[0].parkingPrices.put(ChargingType.AC, 3.0);
+        stations.get(0).pricingModels[0].chargingPrices.put(ChargingType.AC, 0.2);
+
+        ViewStationNetwork(Customers,owners,stations);
+
+        ChargingSession session = new ChargingSession();
+        session.startSession(Customers.get(0), stations.get(0), 0);
+        session.endSession(800);
+
+        System.out.println(session.getInvoice().toString());
+
+
+    }
+
+
+    public static void ViewStationNetwork(ArrayList<Customer> customers, ArrayList<Owner> owners, ArrayList<ChargingStation> stations){
+        System.out.println(customers.toString());
         System.out.println(owners.toString());
         System.out.println(stations.toString());
     }
-
 
 }

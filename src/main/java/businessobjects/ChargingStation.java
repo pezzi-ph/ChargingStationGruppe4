@@ -9,10 +9,9 @@ public class ChargingStation {
 
     private String stationId;
     private String location;
-    private PricingModel[] pricingModels;
+    public PricingModel[] pricingModels;
     public ArrayList<ChargingPoint> chargingPoints = new ArrayList<>();
 
-    // Constructor
     public ChargingStation(String location, Owner owner) {
         if(!owner.isLoggedIn()){
             throw new IllegalStateException("Please log in to view revenue reports");
@@ -21,7 +20,6 @@ public class ChargingStation {
         this.location = location;
     }
 
-    // Getter
     public String getLocation() {
         return location;
     }

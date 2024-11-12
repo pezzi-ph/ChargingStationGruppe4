@@ -4,6 +4,8 @@ import enums.ChargingType;
 import enums.Status;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 
 public class ChargingSession {
@@ -11,6 +13,7 @@ public class ChargingSession {
     private String sessionId;
     private String customerId;
     private String chargingStationId;
+    private PricingModel pricingModel;
     private ChargingType chargingType;
     private String location;
     private double usedEnergy; // in kWh
@@ -48,6 +51,8 @@ public class ChargingSession {
             return false; // The session should not start due to insufficient funds
         }
 
+        Date d = new Date();
+
         // If the charging point is available and the customer has sufficient balance, start the session
         chargingPoint.setStatus(Status.IN_USE); // Set the status to IN_USE
         this.customerId = customer.getCustomerId();
@@ -56,24 +61,21 @@ public class ChargingSession {
         this.startTime = LocalDateTime.now();
         this.location = chargingStation.getLocation();
         this.inProgress = true;
+        this.pricingModel = Arrays.stream(chargingStation.pricingModels).filter(x -> (d.after(x.getValidFrom()) && d.before(x.getValidTo()))).findFirst().get();
 
-        // Send a notification to the customer that the session has started
         customer.receiveNotification(new Notification("Charging Session started."));
         return true;
     }
 
-    public void endSession() {
+    public void endSession(double usedEnergy) {
         this.endTime = LocalDateTime.now();
         this.duration = (int) java.time.Duration.between(startTime, endTime).toMinutes();
-        // Simulate used energy and cost calculations
-        this.usedEnergy = duration * 0.5; // Assuming 0.5 kWh per minute
-        this.cost = usedEnergy * 0.30; // Assuming $0.30 per kWh
+        this.usedEnergy = usedEnergy;
+        this.cost = usedEnergy * pricingModel.chargingPrices.get(chargingType) + pricingModel.parkingPrices.get(chargingType)*duration;
         this.inProgress = false;
 
-        // Generate invoice
         this.invoice = new Invoice(this);
     }
-    // Getters and Setters
 
     public String getSessionId() {
         return sessionId;
@@ -147,4 +149,21 @@ public class ChargingSession {
         this.invoice = invoice;
     }
 
+
+    @Override
+    public String toString() {
+        return "\nChargingSession{\n" +
+                "sessionId='" + sessionId + '\'' +
+                ", customerId='" + customerId + '\'' +
+                ", chargingStationId='" + chargingStationId + '\'' +
+                ", pricingModel=" + pricingModel +
+                ", chargingType=" + chargingType +
+                ", location='" + location + '\'' +
+                ", usedEnergy=" + usedEnergy +
+                ", cost=" + cost +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                "\n}";
+    }
 }
